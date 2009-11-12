@@ -1,0 +1,27 @@
+BUILDING
+========
+
+$ ./configure
+$ make
+$ su -c "make install"
+
+RUNNING
+=======
+
+$ releasetracker moviefile
+$ cat moviefile
+movie 1
+movie 2
+movie 3
+movie 4
+
+Put in cron job and run every once in a while, and you'll wake up with a mail
+listing to all the new movies you want to pirate.
+
+The movie file argument can be a relative path, an absolute path, or an URI
+using any protocol GIO supports.
+
+COPYING
+=======
+
+Do eet!
