@@ -35,14 +35,16 @@ public class Main : GLib.Object {
 		return 0;
 	}
 
-	private static void* do_request (string movie_name) {
+	private static void do_request (string movie_name)
+		requires (movie_name != null && movie_name.length > 0)
+	{
 		var session = new Soup.SessionAsync ();
 		var message = new Soup.Message ("GET", "http://scenereleases.info/category/movies?s=%s&feed=rss2".printf(Soup.URI.encode(movie_name, null)));
 
 		session.send_message (message);
-		Xml.Doc* xml_doc = Parser.parse_doc (message.response_body.data);
+		Xml.Doc* xml_doc = Parser.parse_doc ((string) message.response_body.data);
 
-		var ctxt = new Xml.XPathContext (xml_doc);
+		var ctxt = new Xml.XPath.Context (xml_doc);
 		var objs = ctxt.eval_expression ("/rss/channel/item");
 		for (var i = 0; i < objs->nodesetval->length (); i++) {
 			var rinfo = ReleaseInfo ();
@@ -62,6 +64,5 @@ public class Main : GLib.Object {
 			stdout.printf ("\t\t%s\n", rinfo.category);
 			stdout.printf ("\t\t%s\n", rinfo.link);
 		}
-		return null;
 	}
 }
